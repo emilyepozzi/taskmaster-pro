@@ -87,6 +87,7 @@ $(".list-group").on("click", "p", function() {
     .text()
     .trim();
 
+
   // replace p element with a new textarea
   var textInput = $("<textarea>")
     .addClass("form-control")
@@ -173,6 +174,58 @@ $("#remove-tasks").on("click", function() {
     $("#list-" + key).empty();
   }
   saveTasks();
+});
+
+// to be able to move tasks and drag and dropped to a different location
+$(".card .list-group").sortable({
+  connectWith: $(".card .list-group"),
+  scroll: false,
+  tolerance: "pointer",
+  helper: "clone",
+  activate: function(event) {
+    console.log("activate", this);
+  },
+  deactivate: function(event) {
+    console.log("deactivate", this);
+  },
+  over: function(event) {
+    console.log("over", event.target);
+  },
+  out: function(event) {
+    console.log("out", event.target);
+  },
+  update: function(event) {
+// loop over current set of children in sortable list
+$(this).children().each(function() {
+  var text = $(this)
+    .find("p")
+    .text()
+    .trim();
+
+  var date = $(this)
+    .find("span")
+    .text()
+    .trim();
+
+  console.log(text, date);
+});
+
+  } 
+});
+
+$("#trash").droppable({
+  accept: ".card .list-group-item",
+  tolerance: "touch",
+  drop: function(event, ui) {
+    ui.draggable.remove();
+    console.log("drop");
+  },
+  over: function(event, ui) {
+    console.log("over");
+  },
+  out: function(event, ui) {
+    console.log("out");
+  }
 });
 
 // load tasks for the first time
